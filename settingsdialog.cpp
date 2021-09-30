@@ -35,7 +35,7 @@ void SettingsDialog::InitWidgets()
 
 //  Init layouts.
 
-        pWindowLayout   =   new QVBoxLayout(this);
+        pWindowLayout   =   new QVBoxLayout();
         pFormLayout     =   new QFormLayout();
         pButtonLayout   =   new QHBoxLayout();
 
@@ -44,9 +44,6 @@ void SettingsDialog::InitWidgets()
         pCloseButton        =   new QPushButton("C&lose");
         pDefaultsButton     =   new QPushButton("Default  Font");
         pSaveButton         =   new QPushButton("Save");
-//        pEditorFontButton   =   new QPushButton("Editor Font");
-
-        pFullScreen         =   new QCheckBox("Open Full Screen");
 
 //  Line Edits.
         pDBName             =   new QLineEdit();
@@ -100,7 +97,6 @@ void SettingsDialog::SetLayout()
         pWindowLayout->addLayout(pButtonLayout);
 
         setLayout(pWindowLayout);
-
         return;
 }
 

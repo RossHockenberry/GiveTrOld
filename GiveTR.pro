@@ -14,7 +14,8 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     mydataobject.cpp \
-    settingsdialog.cpp
+    settingsdialog.cpp \
+    simplemessagebox.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -23,7 +24,8 @@ HEADERS += \
     settingsdialog.h \
     myflag.h \
     data_support.h \
-    myinclude.h
+    myinclude.h \
+    simplemessagebox.h
 
 FORMS +=
 

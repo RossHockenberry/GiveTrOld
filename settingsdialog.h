@@ -4,6 +4,8 @@
 #include "myinclude.h"
 #include "mainwindow.h"
 
+class MainWindow;
+
 class SettingsDialog : public QDialog
 {
 public:                                     //  Public Data.

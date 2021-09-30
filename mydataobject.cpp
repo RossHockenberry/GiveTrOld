@@ -35,7 +35,7 @@ bool MyDataObject::OpenDb()
     bool bFlag;
 
         bFlag = OpenDatabase();
-        GetDatabaseTables();
+//        GetDatabaseTables();
         return bFlag;
 }
 
@@ -69,8 +69,11 @@ void MyDataObject::SetDriverName()
 
 bool MyDataObject::OpenDatabase()
 {
-        return oOpenFlag.Set(oDb.open());
-        GetDatabaseTables();
+        oOpenFlag.Set(oDb.open());
+        if(oOpenFlag.Is())
+            GetDatabaseTables();
+
+        return oOpenFlag.Is();
 }
 
 bool MyDataObject::CloseDatabase()

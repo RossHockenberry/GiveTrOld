@@ -2,12 +2,14 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QDialog>
 #include <QLabel>
 #include <QLayout>
 #include <QTableWidget>
 #include <QListWidget>
 #include "mydataobject.h"
-
+#include "simplemessagebox.h"
+#include "settingsdialog.h"
 
 class MainWindow : public QMainWindow
 {
@@ -25,6 +27,20 @@ private:
     bool                    SetLayout();
     bool                    SetSlots();
     bool                    LoadSettings();
+    void                    EditSettings();
+
+//  Enable and Disable Sections.
+    void                    EnableTransFields();
+    void                    DisableTransFields();
+    void                    EnableAccountFields();
+    void                    DisableAccountFields();
+
+//  Other member functions.
+    void                    FillAccountList();
+
+//  Database.
+    MyDataObject            *   pData;
+    bool                    bDbOpenFlag = false;
 
 //  Data Members.
     std::string sDBDriver;                      //  Driver type.
@@ -42,16 +58,27 @@ private:
     QWidget                 *   pCentralWidget;
     QDate                   *   pDate;
     QSettings               *   pSettings;
+    QAction                 *   pEditSettings;
 
     QTableWidget            *   pTransTable;
     QListWidget             *   pAccountList;
 
+// Transaction Fields.
     QLineEdit               *   pAmount;
-    QDateTimeEdit           *   pDateEdit;
+    QLineEdit               *   pCheckNumber;
+    QDateTimeEdit           *   pTransDate;
+    QComboBox               *   pPaidHow;
+
+//  Account Fields.
+    QDateTimeEdit           *   pAccountDate;
+    QLineEdit               *   pAccountName;
+    QTextEdit               *   pAccountDesc;
+    QLineEdit               *   pAccountTotal;
 
     QToolBar                *   pMainToolBar;
     QPushButton             *   pNewAccountButton;
     QPushButton             *   pNewTransButton;
+    QPushButton             *   pLastGivenReport;
 
     QLabel                  *   pTransTableLabel;
     QLabel                  *   pAccountListLabel;
@@ -69,5 +96,12 @@ private:
     QFormLayout             *   pUpperLeftLayout;
     QVBoxLayout             *   pUpperRightLayout;
     QHBoxLayout             *   pLowerLayout;
+    QFormLayout             *   pLowerLeftLayout;
+    QVBoxLayout             *   pLowerRightLayout;
+
+public slots:
+    void                    AccountListDoubleClicked(QListWidgetItem *);
+    bool                    NewTransaction();
+    bool                    NewAccount();
 };
 #endif // MAINWINDOW_H
