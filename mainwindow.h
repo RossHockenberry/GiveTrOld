@@ -34,24 +34,43 @@ private:
     void                    DisableTransFields();
     void                    EnableAccountFields();
     void                    DisableAccountFields();
+    void                    EnableFields() {
+                                EnableTransFields();
+                                EnableAccountFields(); }
+    void                    DisableFields() {
+                                DisableTransFields();
+                                DisableAccountFields(); }
+    void                    ClearFields() {         //  Might as well do here.
+                                ClearAccountFields();
+                                ClearTransFields(); };
+    void                    ClearAccountFields();
+    void                    ClearTransFields();
+    void                    FillAccountFields();
 
 //  Other member functions.
     void                    FillAccountList();
+    void                    FillTransactionTable();
+    bool                    WriteNewAccountRecord();
+    bool                    WriteNewTransactionRecord();
 
 //  Database.
     MyDataObject            *   pData;
     bool                    bDbOpenFlag = false;
+    std::vector<stTypeData> vAccounts;
+    std::string             sSelectedAccount;       //  Account Name.
+    int                     iSelectedAccount = -1;  //  Holds the table ID value.
+    MyFlag                  bEditFlag;
 
 //  Data Members.
-    std::string sDBDriver;                      //  Driver type.
-    std::string sDBName;                        //  Database connection strings.
+    std::string sDBDriver;                          //  Driver type.
+    std::string sDBName;                            //  Database connection strings.
     std::string sDBHost;
     std::string sDBAddress;
     std::string sDBPort;
     std::string sDBUser;
     std::string sDBPassword;
 
-    QRect       * pScreenRect;                  //  Screen and Window stuff.
+    QRect       * pScreenRect;                      //  Screen and Window stuff.
     QScreen     * pScreen;
     QWindow     * pWindow;
 
@@ -68,6 +87,7 @@ private:
     QLineEdit               *   pCheckNumber;
     QDateTimeEdit           *   pTransDate;
     QComboBox               *   pPaidHow;
+    QTextEdit               *   pComment;
 
 //  Account Fields.
     QDateTimeEdit           *   pAccountDate;
@@ -79,11 +99,15 @@ private:
     QPushButton             *   pNewAccountButton;
     QPushButton             *   pNewTransButton;
     QPushButton             *   pLastGivenReport;
+    QPushButton             *   pSaveButton;
+    QPushButton             *   pCancelButton;
+    QPushButton             *   pDoneButton;
 
     QLabel                  *   pTransTableLabel;
     QLabel                  *   pAccountListLabel;
     QLabel                  *   pSelectedAccountLabel;
-    QLabel                  *   pPayee;
+    QLabel                  *   pPayeeLabel;
+    QLabel                  *   pBlankLabel;
 
     QMenu                   *   pFileMenu;
     QMenu                   *   pToolMenu;
@@ -95,13 +119,18 @@ private:
     QHBoxLayout             *   pUpperLayout;
     QFormLayout             *   pUpperLeftLayout;
     QVBoxLayout             *   pUpperRightLayout;
+    QHBoxLayout             *   pButtonLayout;
     QHBoxLayout             *   pLowerLayout;
-    QFormLayout             *   pLowerLeftLayout;
+    QVBoxLayout             *   pLowerLeftLayout;
+    QFormLayout             *   pAccountLayout;
     QVBoxLayout             *   pLowerRightLayout;
 
 public slots:
     void                    AccountListDoubleClicked(QListWidgetItem *);
     bool                    NewTransaction();
     bool                    NewAccount();
+    bool                    CancelButton();
+    bool                    SaveButton();
+    bool                    DoneButton();
 };
 #endif // MAINWINDOW_H
