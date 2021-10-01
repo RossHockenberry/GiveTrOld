@@ -69,9 +69,10 @@ bool MainWindow::InitWidgets()
 
 
         pTransTable             =   new QTableWidget();
-        pTransTable->setColumnCount(2);
+        pTransTable->setColumnCount(4);
         pTransTable->setRowCount(7);
-        QStringList oTemp = {"Date of Last Give" , "Amount Last Given"};
+        QStringList oTemp = {"Date of Last Give" , "Amount Last Given" ,
+                                "Check #" , "Comment"};
         pTransTable->setHorizontalHeaderLabels(oTemp);
         pTransTable->setColumnWidth(1,300);
 
@@ -296,6 +297,11 @@ void MainWindow::FillAccountList()
 
 void MainWindow::FillTransactionTable()
 {
+    QString sBuild;
+
+        sBuild = QString("Select origin_date , amount , check # , comment"
+                            " FROM transaction WHERE account_id = %1")
+                                .arg(iSelectedAccount);
         return;
 }
 
