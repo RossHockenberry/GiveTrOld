@@ -52,6 +52,7 @@ private:
     void                    FillTransactionTable();
     bool                    WriteNewAccountRecord();
     bool                    WriteNewTransactionRecord();
+    bool                    UpdateAccountRecord();
 
 //  Database.
     MyDataObject            *   pData;

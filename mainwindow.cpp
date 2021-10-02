@@ -31,7 +31,7 @@ bool MainWindow::InitObject()
         stConn.sPort            =   sDBPort;
         stConn.sUserName        =   sDBUser;
         stConn.sPassword        =   sDBPassword;
-
+!!!! layout problem and saveing edit record.
         pData = new MyDataObject(stConn);
         pData->OpenDb();
 
@@ -272,6 +272,7 @@ void MainWindow::EnableAccountFields()
 
 void MainWindow::DisableAccountFields()
 {
+        bEditFlag.SetFalse();               //  Set everytime to be safe.
         pAccountDate->setEnabled(false);
         pAccountName->setEnabled(false);
         pAccountDesc->setEnabled(false);
@@ -285,7 +286,7 @@ void MainWindow::FillAccountList()
     QString sBuild;
 
         vAccounts.clear();          //  Clear the list first.
-
+        pAccountList->clear();
         sBuild = "SELECT account_id , name FROM account ORDER BY name";
         pData->ReturnQueryData(sBuild.toStdString() , vAccounts);
 
@@ -329,14 +330,29 @@ bool MainWindow::WriteNewAccountRecord()
         QString sDesc       =   QString(pAccountDesc->toPlainText()).replace("'","''");
 
 //  First we need to read back the data and build a query string.
-        sBuild.append("INSERT INTO account ");
+        sBuild = "INSERT INTO account ";
         sBuild.append("(name , description , total_given) ");
 
 //  Double single quotes work for Postgresql - not sure about others.
 //  I'll have to check on it.   Backspace as an escape doesn't work.
         sBuild.append("VALUES ('");
         sBuild += sName + "','";
-        sBuild += sDesc + "','0.0'";
+        sBuild += sDesc + "','0.0')";
+POUT(sBuild.toStdString());
+        pData->SendDatabaseQuery(sBuild.toStdString());
+        return true;
+}
+
+bool MainWindow::UpdateAccountRecord()
+{
+    QString sBuild;
+
+//  Escape single quotes.
+        QString sName       =   QString(pAccountName->text()).replace("'","''");
+        QString sDesc       =   QString(pAccountDesc->toPlainText()).replace("'","''");
+
+        sBuild = "UPDATE account SET 'name ='" + sName;
+        sBuild += "' description = '" + sDesc;
 
         pData->SendDatabaseQuery(sBuild.toStdString());
         return true;
@@ -358,7 +374,13 @@ bool MainWindow::WriteNewTransactionRecord()
 
         sBuild = "INSERT INTO transaction "
                     "(origin_date , amount , how_paid , check_number "
-                    " comment , account_id";
+                    " comment , account_id ";
+        sBuild += QString("VALUES ( sTransDate , sAmount , sHow_Paid , sCheck_Number ,"
+                            " sComment , %1").arg(iSelectedAccount);
+
+POUT(sBuild.toStdString());
+return true;
+        pData->SendDatabaseQuery(sBuild.toStdString());
 
         return true;
 }
@@ -405,6 +427,7 @@ void MainWindow::AccountListDoubleClicked(QListWidgetItem * pItem)
             {
                 iSelectedAccount = it.iKey;
                 pPayeeLabel->setText(sSelectedAccount.c_str());
+                bEditFlag.SetTrue();                //  Tells us an edit is going on.
                 EnableFields();
                 FillAccountFields();
                 break;
@@ -428,13 +451,26 @@ bool MainWindow::SaveButton()
             oMB.ErrorBox("Name must be entered!");
             return false;
         }
-        WriteNewAccountRecord();
+
+        if(bEditFlag.Is())
+        {
+            UpdateAccountRecord();
+            ClearAccountFields();
+            DisableAccountFields();
+        }
+        else
+        {
+            WriteNewAccountRecord();
+        }
+
         FillAccountList();
         return true;
 }
 
 bool MainWindow::DoneButton()
 {
-
+        WriteNewTransactionRecord();
+        ClearFields();
+        DisableFields();
         return true;
 }
